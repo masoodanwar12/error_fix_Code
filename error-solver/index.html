@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ErrorFix AI — Instant Bug Solver</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span>ErrorFix <span class="logo-ai">AI</span></span>
+      </div>
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#solver" class="btn btn-sm">Try it free</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg">
+      <div class="hero-blob blob1"></div>
+      <div class="hero-blob blob2"></div>
+      <div class="grid-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">Powered by Claude AI</div>
+      <h1>Paste your error.<br/><span class="gradient-text">Get the fix instantly.</span></h1>
+      <p class="hero-sub">Stop wasting hours on Stack Overflow. Drop your buggy code or error message and get a precise fix with a clear explanation — in seconds.</p>
+      <div class="hero-actions">
+        <a href="#solver" class="btn btn-primary">Fix my error now →</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+      <div class="hero-langs">
+        <span>Supports:</span>
+        <span class="lang-pill">JavaScript</span>
+        <span class="lang-pill">Python</span>
+        <span class="lang-pill">TypeScript</span>
+        <span class="lang-pill">React</span>
+        <span class="lang-pill">CSS</span>
+        <span class="lang-pill">SQL</span>
+        <span class="lang-pill">+ more</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="container">
+      <div class="section-eyebrow">Simple process</div>
+      <h2>Three steps to a clean fix</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-icon">📋</div>
+          <h3>Paste your code</h3>
+          <p>Copy your buggy code or the full error message and paste it into the editor.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-icon">🤖</div>
+          <h3>AI analyzes it</h3>
+          <p>Claude AI reads your code, identifies the root cause, and generates the corrected version.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-icon">✅</div>
+          <h3>Copy the fix</h3>
+          <p>Get the fixed code plus a plain-English explanation of what went wrong and why.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLVER -->
+  <section class="solver-section" id="solver">
+    <div class="container">
+      <div class="section-eyebrow">The Tool</div>
+      <h2>Fix your error</h2>
+
+      <div class="solver-card">
+
+        <!-- Top bar -->
+        <div class="solver-topbar">
+          <div class="lang-selector">
+            <label for="lang-select">Language</label>
+            <select id="lang-select">
+              <option value="JavaScript">JavaScript</option>
+              <option value="Python">Python</option>
+              <option value="TypeScript">TypeScript</option>
+              <option value="React / JSX">React / JSX</option>
+              <option value="CSS">CSS</option>
+              <option value="SQL">SQL</option>
+              <option value="Node.js">Node.js</option>
+              <option value="PHP">PHP</option>
+              <option value="any language">Other</option>
+            </select>
+          </div>
+          <div class="example-btns">
+            <span class="examples-label">Try an example:</span>
+            <button class="example-chip" onclick="loadExample('js')">JS TypeError</button>
+            <button class="example-chip" onclick="loadExample('py')">Python crash</button>
+            <button class="example-chip" onclick="loadExample('react')">React warning</button>
+            <button class="example-chip" onclick="loadExample('async')">Async error</button>
+          </div>
+        </div>
+
+        <!-- Editor -->
+        <div class="editor-wrap">
+          <div class="editor-header">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="editor-filename" id="editor-filename">buggy-code.js</span>
+          </div>
+          <textarea id="code-input" spellcheck="false"
+            placeholder="// Paste your buggy code or error message here...
+// Example:
+// TypeError: Cannot read properties of undefined (reading 'map')
+// at App.js:12"></textarea>
+          <div class="editor-footer">
+            <span id="char-count">0 characters</span>
+            <button class="clear-btn" onclick="clearAll()">🗑 Clear</button>
+          </div>
+        </div>
+
+        <!-- Action -->
+        <div class="solve-action">
+          <button class="btn btn-primary btn-lg" id="solve-btn" onclick="solveError()">
+            <span id="btn-text">⚡ Fix my error</span>
+          </button>
+          <span class="solve-hint">Powered by Claude Sonnet — free to use</span>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-state" id="loading-state">
+          <div class="loader-ring"></div>
+          <div class="loading-msgs" id="loading-msgs">Analyzing your error...</div>
+        </div>
+
+        <!-- Result -->
+        <div class="result-wrap" id="result-wrap">
+
+          <div class="result-tabs">
+            <button class="tab active" onclick="switchTab('fix', this)">Fixed Code</button>
+            <button class="tab" onclick="switchTab('explain', this)">Explanation</button>
+            <button class="tab" onclick="switchTab('cause', this)">Root Cause</button>
+          </div>
+
+          <!-- Fixed Code Tab -->
+          <div class="tab-panel active" id="tab-fix">
+            <div class="result-toolbar">
+              <div class="result-meta">
+                <span class="error-badge" id="error-badge">TypeError</span>
+                <span class="result-label">Fixed code</span>
+              </div>
+              <button class="copy-btn" id="copy-btn" onclick="copyFix()">📋 Copy</button>
+            </div>
+            <pre class="result-code" id="result-code"></pre>
+          </div>
+
+          <!-- Explanation Tab -->
+          <div class="tab-panel" id="tab-explain">
+            <div class="explain-content" id="explain-content"></div>
+          </div>
+
+          <!-- Root Cause Tab -->
+          <div class="tab-panel" id="tab-cause">
+            <div class="cause-content" id="cause-content"></div>
+          </div>
+
+        </div>
+
+        <!-- Error state -->
+        <div class="error-state" id="error-state">
+          <span class="error-icon">⚠️</span>
+          <p id="error-msg">Something went wrong. Please try again.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">⚡ ErrorFix AI</div>
+      <p>Built with Claude AI · Fix bugs in seconds · Free to use</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
